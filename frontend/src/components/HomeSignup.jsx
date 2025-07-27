@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function HomeSignup() {
   const {
@@ -9,8 +12,35 @@ export default function HomeSignup() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data); //Firebase here
+ const [signupError, setSignupError] = useState(""); 
+ const navigate = useNavigate();
+
+const onSubmit = async (data) => {
+    setSignupError(""); // Clear previous error before submitting
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
+      await updateProfile(userCredential.user, {
+        displayName: data.name,
+      });
+
+      console.log("User created:", userCredential.user);
+      navigate("/login");
+
+    } catch (error) {
+      console.error("Signup error:", error.message);
+      
+      // Firebase-specific error handling
+      if (error.code === "auth/email-already-in-use") {
+        setSignupError("An account with this email already exists.");
+      } else {
+        setSignupError("Something went wrong. Please try again.");
+      }
+    }
   };
 
   return (
@@ -102,11 +132,15 @@ export default function HomeSignup() {
       >
         {isSubmitting ? "Creating..." : "Sign Up"}
       </button>
+
+      {signupError && (
+  <p className="text-sm text-red-600 mt-2 text-center">{signupError}</p>
+)}
     </form>
 
     <p className="text-sm text-center text-gray-600 mt-4">
       Already have an account?{" "}
-      <Link to="/login" className="text-purple-600 font-medium hover:underline">
+      <Link to="/login" className="text-purple-600  hover:underline">
         Log in
       </Link>
     </p>

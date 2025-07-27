@@ -1,5 +1,9 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../firebase"; 
 
 export default function HomeLogin() {
   const {
@@ -8,9 +12,25 @@ export default function HomeLogin() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data); // Firebase here
-  };
+  const navigate = useNavigate();
+
+ const onSubmit = async (data) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      data.email,
+      data.password
+    );
+
+    console.log("Logged in:", userCredential.user);
+    navigate("/user");
+  } catch (error) {
+    console.error("Login error:", error.message);
+  }
+};
+
+
+
 
   return (
    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-br from-white to-purple-50 px-6 sm:px-16 py-24 lg:py-12 gap-16 sm:gap-10 md:gap-8 lg:gap-28">
@@ -85,6 +105,17 @@ export default function HomeLogin() {
               </p>
             )}
           </div>
+          {/* Forgot Password */}
+          <p className="text-sm text-right text-gray-600 mt-4">
+  <Link
+    to="/forgot-password"
+    className="text-purple-600  cursor-pointer hover:underline"
+  >
+    Forgot Password?
+  </Link>
+</p>
+
+
 
           {/* Submit */}
           <button
@@ -100,7 +131,7 @@ export default function HomeLogin() {
           Don’t have an account?{" "}
           <Link
             to="/signup"
-            className="text-purple-600 font-medium hover:underline"
+            className="text-purple-600  hover:underline"
           >
             Sign Up
           </Link>

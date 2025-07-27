@@ -5,6 +5,7 @@ import LandingTestimonial from "../components/LandingPage/LandingTestimonial";
 import LandingFeaturesSection from "../components/LandingPage/LandingFeatureSection";
 import FeatureImg from "../assets/main.svg";
 import FeatureSmImg from "../assets/smmain.svg";
+import Footer from "../components/Footer";
 
 function LandingPage() {
   return (
@@ -73,11 +74,7 @@ function LandingPage() {
       <LandingTestimonial />
 
       {/* Footer */}
-      <footer className="w-full px-14 sm:px-12 py-4 text-center text-gray-500 text-sm">
-        <div className="max-w-7xl mx-auto">
-          © 2025 DeepRead AI. Developed by Neha Ghariyal.
-        </div>
-      </footer>
+    <Footer />
     </div>
   );
 }

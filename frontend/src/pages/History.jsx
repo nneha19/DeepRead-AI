@@ -1,8 +1,11 @@
 import React from 'react'
+import Footer from '../components/Footer'
 
 function History() {
   return (
-    <div>History</div>
+    <div>
+      History
+    </div>
   )
 }
 
