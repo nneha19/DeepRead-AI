@@ -2,11 +2,14 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import MainLogo from "../../assets/mainlogo.svg";
 
 const LandingNav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+const currentPath = location.pathname;
 
   return (
     <nav className="w-full px-6 pt-6 pb-4 sm:px-8 sm:pt-8 sm:pb-5 ">
@@ -24,20 +27,30 @@ const LandingNav = () => {
         </div>
 
         {/* Desktop Links */}
-        <div className="hidden sm:flex items-center space-x-4">
-          <NavLink
-            to="/login"
-            className="text-sm text-purple-700 hover:underline"
-          >
-            Log In
-          </NavLink>
-          <NavLink
-            to="/signup"
-            className="bg-purple-700 text-white px-4 py-2 text-sm rounded-full hover:bg-purple-800 transition duration-200"
-          >
-            Sign Up
-          </NavLink>
-        </div>
+       <div className="hidden sm:flex items-center space-x-4">
+<NavLink
+  to="/login"
+  className={
+    currentPath === "/login"
+      ? "bg-purple-700 text-white px-4 py-2 text-sm rounded-full"
+      : "text-sm text-purple-700 hover:underline"
+  }
+>
+  Log In
+</NavLink>
+
+<NavLink
+  to="/signup"
+  className={
+    currentPath === "/signup" || currentPath === "/"
+      ? "bg-purple-700 text-white px-4 py-2 text-sm rounded-full"
+      : "text-sm text-purple-700 hover:underline"
+  }
+>
+  Sign Up
+</NavLink>
+
+</div>
 
         {/* Hamburger */}
         <div className="sm:hidden">
@@ -52,25 +65,35 @@ const LandingNav = () => {
 
       {/* Mobile Dropdown Menu */}
       {menuOpen && (
-        <div className="sm:hidden mt-4 absolute left-0 right-0 w-full z-50">
-          <div className="bg-gradient-to-br from-white to-purple-50 shadow-xs rounded-b-md p-5 mx-4 space-y-4 border border-gray-200">
-            <NavLink
-              to="/login"
-              className="block text-sm text-purple-700 hover:underline"
-              onClick={() => setMenuOpen(false)}
-            >
-              Log In
-            </NavLink>
-            <NavLink
-              to="/signup"
-              className="block bg-purple-700 text-white px-4 py-2 text-sm rounded-md hover:bg-purple-800 transition duration-200"
-              onClick={() => setMenuOpen(false)}
-            >
-              Sign Up
-            </NavLink>
-          </div>
-        </div>
-      )}
+  <div className="sm:hidden mt-4 absolute left-0 right-0 w-full z-50">
+    <div className="bg-gradient-to-br from-white to-purple-50 shadow-xs rounded-b-md p-5 mx-4 space-y-4 border border-gray-200">
+     <NavLink
+  to="/login"
+  className={
+    currentPath === "/login"
+      ? "block bg-purple-700 text-white px-4 py-2 text-sm rounded-md"
+      : "block text-sm text-purple-700 hover:underline"
+  }
+  onClick={() => setMenuOpen(false)}
+>
+  Log In
+</NavLink>
+
+<NavLink
+  to="/signup"
+  className={
+    currentPath === "/signup" || currentPath === "/"
+      ? "block bg-purple-700 text-white px-4 py-2 text-sm rounded-md"
+      : "block text-sm text-purple-700 hover:underline"
+  }
+  onClick={() => setMenuOpen(false)}
+>
+  Sign Up
+</NavLink>
+
+    </div>
+  </div>
+)}
     </nav>
   );
 };

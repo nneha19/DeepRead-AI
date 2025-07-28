@@ -7,6 +7,7 @@ import PrivateLayout from './pages/PrivateLayout'
 import UserHome from './pages/UserHome'
 import History from './pages/History'
 import MessageDetail from './pages/MessageDetail'
+import HistoryMessageDetail from './pages/HistoryMessageDetail'
 import ForgotPassword from './pages/ForgotPassword'
 import Profile from './pages/Profile'
 import { Route, Routes } from 'react-router-dom'
@@ -27,6 +28,7 @@ function App() {
   <Route path="profile" element={<Profile />} />
   <Route path="history" element={<History />} />
   <Route path="message/:id" element={<MessageDetail />} />
+  <Route path="history/:id" element={<HistoryMessageDetail />} />
 </Route>
 </Routes>
 

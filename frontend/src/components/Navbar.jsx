@@ -12,7 +12,10 @@ const LoggedInNavbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <Link to="/user" className="text-purple-600 font-medium hover:underline">
+          <Link
+            to="/user"
+            className="text-purple-600 font-medium hover:underline"
+          >
             <img
               src={MainLogo}
               alt="DeepRead AI Logo"
@@ -24,16 +27,16 @@ const LoggedInNavbar = () => {
         {/* Desktop Links */}
         <div className="hidden sm:flex items-center space-x-6 text-sm font-medium text-gray-700">
           <NavLink
-  to="/user"
-  end
-  className={({ isActive }) =>
-    `hover:text-purple-700 transition ${
-      isActive ? "text-purple-700 font-semibold" : ""
-    }`
-  }
->
-  Analyze
-</NavLink>
+            to="/user"
+            end
+            className={({ isActive }) =>
+              `hover:text-purple-700 transition ${
+                isActive ? "text-purple-700 font-semibold" : ""
+              }`
+            }
+          >
+            Analyze
+          </NavLink>
 
           <NavLink
             to="/user/history"
@@ -73,13 +76,13 @@ const LoggedInNavbar = () => {
         <div className="sm:hidden mt-4 absolute left-0 right-0 w-full z-50">
           <div className="bg-gradient-to-br from-white to-purple-50 shadow-xs rounded-b-md p-5 mx-4 space-y-4 border border-gray-200">
             <NavLink
-  to="/user"
-  end
-  className="block text-sm text-purple-700 hover:underline"
-  onClick={() => setMenuOpen(false)}
->
-  Analyze
-</NavLink>
+              to="/user"
+              end
+              className="block text-sm text-purple-700 hover:underline"
+              onClick={() => setMenuOpen(false)}
+            >
+              Analyze
+            </NavLink>
             <NavLink
               to="/user/history"
               className="block text-sm text-purple-700 hover:underline"

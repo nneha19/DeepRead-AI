@@ -28,13 +28,13 @@ const onSubmit = async (data) => {
         displayName: data.name,
       });
 
-      console.log("User created:", userCredential.user);
+      
       navigate("/login");
 
     } catch (error) {
       console.error("Signup error:", error.message);
       
-      // Firebase-specific error handling
+      // error handling
       if (error.code === "auth/email-already-in-use") {
         setSignupError("An account with this email already exists.");
       } else {

@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { getAuth } from "firebase/auth";
-import { Loader2, Sparkles, Copy } from "lucide-react";
+import axios from "axios";
+import { Loader2, Sparkles, Copy, ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
-export default function MessageDetail() {
+export default function HistoryMessageDetail() {
   const { id } = useParams();
   const [messageData, setMessageData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [followUpLoading, setFollowUpLoading] = useState(false);
+  const [followupLoading, setFollowupLoading] = useState(false);
   const [username, setUsername] = useState("You");
 
   const fetchMessage = async () => {
@@ -34,7 +35,7 @@ export default function MessageDetail() {
   };
 
   const getFollowUp = async () => {
-    setFollowUpLoading(true);
+    setFollowupLoading(true);
     try {
       const user = getAuth().currentUser;
       const token = await user.getIdToken();
@@ -51,7 +52,7 @@ export default function MessageDetail() {
     } catch (err) {
       console.error("Follow-up error:", err);
     } finally {
-      setFollowUpLoading(false);
+      setFollowupLoading(false);
     }
   };
 
@@ -77,20 +78,36 @@ export default function MessageDetail() {
 
   return (
     <div className="min-h-screen px-4 py-12 sm:px-8 lg:px-32 bg-gradient-to-br from-white to-purple-50 text-gray-800">
+      {/* Back button */}
+      <Link
+        to="/user/history"
+        className="flex items-center gap-2 font-medium text-purple-600 mb-6 hover:text-purple-800 transition"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        <span>Back</span>
+      </Link>
+
       {/* User Message */}
       <div className="bg-purple-50 border-l-4 border-purple-400 px-5 py-4 rounded-xl mb-6 shadow-sm">
         <p className="font-semibold text-purple-800 mb-2">{username}:</p>
-        <p className="text-gray-700">{messageData.message}</p>
+        <p className="text-gray-700 whitespace-pre-wrap">
+          {messageData.message}
+        </p>
         <span className="mt-2 inline-block bg-purple-200 text-purple-800 text-sm font-medium px-3 py-1 rounded-full">
           Scenario: {messageData.scenario}
         </span>
+        <p className="text-xs text-gray-500 mt-6">
+          {new Date(messageData.createdAt).toLocaleString()}
+        </p>
       </div>
 
       {/* AI Response */}
       {messageData?.aiResponse && (
         <div className="bg-gray-50 border border-gray-200 px-5 py-4 rounded-xl mb-6 shadow">
           <p className="font-semibold text-gray-800 mb-2">DeepRead AI:</p>
-          <p className="text-gray-700">{messageData.aiResponse}</p>
+          <p className="text-gray-700 whitespace-pre-wrap">
+            {messageData.aiResponse}
+          </p>
         </div>
       )}
 
@@ -105,33 +122,32 @@ export default function MessageDetail() {
           </p>
 
           <div className="flex flex-wrap gap-3">
-            {/* Copy to Clipboard Button */}
             <button
               onClick={() => {
                 navigator.clipboard.writeText(messageData.followUp);
               }}
-              className="flex items-center gap-2  cursor-pointer bg-green-600 text-white px-4 py-2 rounded-full font-medium hover:bg-green-700 transition"
+              className="flex items-center gap-2 cursor-pointer bg-green-600 text-white px-4 py-2 rounded-full font-medium hover:bg-green-700 transition"
             >
               <Copy className="w-4 h-4" />
-              <span>Copy Reply</span>
+              Copy Reply
             </button>
 
-            {/* Analyze New Message Button */}
-            <a
-              href="/user"
-              className="bg-purple-600 cursor-pointer text-white px-4 py-2 rounded-full font-medium hover:bg-purple-700 transition"
+            <Link
+              to="/user"
+              className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-full font-medium hover:bg-purple-700 transition"
             >
+              <Sparkles className="w-4 h-4" />
               Analyze New Message
-            </a>
+            </Link>
           </div>
         </div>
       ) : (
         <button
           onClick={getFollowUp}
-          disabled={followUpLoading}
+          disabled={followupLoading}
           className="flex items-center gap-2 mt-4 px-5 py-2 cursor-pointer bg-purple-600 text-white font-medium rounded-full hover:bg-purple-700 transition disabled:opacity-50"
         >
-          {followUpLoading ? (
+          {followupLoading ? (
             <>
               <Loader2 className="animate-spin w-4 h-4" />
               Generating follow-up...

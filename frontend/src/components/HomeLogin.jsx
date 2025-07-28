@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../firebase"; 
+import { auth } from "../firebase";
+import { useState } from "react";
 
 export default function HomeLogin() {
   const {
@@ -12,48 +13,60 @@ export default function HomeLogin() {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
- const onSubmit = async (data) => {
-  try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      data.email,
-      data.password
-    );
+  const onSubmit = async (data) => {
+    setLoginError(""); // Clear any previous error
 
-    console.log("Logged in:", userCredential.user);
-    navigate("/user");
-  } catch (error) {
-    console.error("Login error:", error.message);
-  }
-};
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
 
+      navigate("/user");
+    } catch (error) {
+      console.error("Login error:", error.message);
 
-
+      // Firebase login errors
+      switch (error.code) {
+        case "auth/user-not-found":
+          setLoginError("No account found with this email.");
+          break;
+        case "auth/wrong-password":
+          setLoginError("Incorrect password. Please try again.");
+          break;
+        case "auth/too-many-requests":
+          setLoginError("Too many failed attempts. Please try again later.");
+          break;
+        default:
+          setLoginError("Login failed. Please check your credentials.");
+      }
+    }
+  };
 
   return (
-   <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-br from-white to-purple-50 px-6 sm:px-16 py-24 lg:py-12 gap-16 sm:gap-10 md:gap-8 lg:gap-28">
-
+    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-br from-white to-purple-50 px-6 sm:px-16 py-24 lg:py-12 gap-16 sm:gap-10 md:gap-8 lg:gap-28">
       {/* Side Content */}
       <div className="order-2 md:order-none flex md:flex-row items-start gap-4 max-w-sm w-full">
-  
-   <div className="w-4 bg-purple-500 rounded self-stretch mt-1 " />
+        <div className="w-4 bg-purple-500 rounded self-stretch mt-1 " />
 
         {/* Text */}
         <div className="flex flex-col space-y-4 text-gray-700">
-      <p className="text-base sm:text-lg md:text-xl leading-relaxed">
-           Understand what was meant — privately, safely, and judgment-free.
+          <p className="text-base sm:text-lg md:text-xl leading-relaxed">
+            Understand what was meant — privately, safely, and judgment-free.
           </p>
           <p className="text-base sm:text-lg md:text-xl leading-relaxed">
-           Welcome back to your insight space.
+            Welcome back to your insight space.
           </p>
         </div>
       </div>
 
       {/* Login Form */}
-       <div className="w-full md:w-2/2 max-w-md bg-white rounded-2xl shadow-xl p-6 sm:p-8">
-    <h2 className="text-3xl font-bold text-purple-700 mb-10 text-center">
+      <div className="w-full md:w-2/2 max-w-md bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+        <h2 className="text-3xl font-bold text-purple-700 mb-10 text-center">
           Welcome Back
         </h2>
 
@@ -107,15 +120,13 @@ export default function HomeLogin() {
           </div>
           {/* Forgot Password */}
           <p className="text-sm text-right text-gray-600 mt-4">
-  <Link
-    to="/forgot-password"
-    className="text-purple-600  cursor-pointer hover:underline"
-  >
-    Forgot Password?
-  </Link>
-</p>
-
-
+            <Link
+              to="/forgot-password"
+              className="text-purple-600  cursor-pointer hover:underline"
+            >
+              Forgot Password?
+            </Link>
+          </p>
 
           {/* Submit */}
           <button
@@ -125,14 +136,16 @@ export default function HomeLogin() {
           >
             {isSubmitting ? "Logging in..." : "Login"}
           </button>
+          {loginError && (
+            <p className="text-sm text-red-600 mt-2 text-center">
+              {loginError}
+            </p>
+          )}
         </form>
 
         <p className="text-sm text-center text-gray-600 mt-4">
           Don’t have an account?{" "}
-          <Link
-            to="/signup"
-            className="text-purple-600  hover:underline"
-          >
+          <Link to="/signup" className="text-purple-600  hover:underline">
             Sign Up
           </Link>
         </p>

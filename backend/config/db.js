@@ -4,7 +4,7 @@ dotenv.config();
 import mongoose from 'mongoose';
 const DB_URI = process.env.DB_URI;
 
-async function connectToDatabase() {
+async function connectToDatabase() {''
   try {
     await mongoose.connect(DB_URI, {
       dbName: "deepread_database",

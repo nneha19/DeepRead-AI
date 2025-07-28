@@ -2,9 +2,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import cors from "cors";
-import {connectToDatabase} from "/config/db.js";
-import Messagerouter from "./routes/messageRoutes.js";
-import Authrouter from "./routes/authRoutes.js";
+import { connectToDatabase } from './config/db.js';
+import router from './routes/messageRoutes.js';
+
 
 
 const app=express();
@@ -14,8 +14,8 @@ app.use(cors());
 app.use(express.json());
 
 
-app.use("/api/auth", Authrouter);
-app.use("/api/messages", Messagerouter);
+
+app.use("/api/messages", router);
 
 
 async function startServer() {
