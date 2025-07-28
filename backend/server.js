@@ -13,6 +13,10 @@ const PORT=process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+// Health check route (required for Render)
+app.get('/', (req, res) => {
+  res.json({ status: 'Backend running', timestamp: new Date() });
+});
 
 
 app.use("/api/messages", router);
