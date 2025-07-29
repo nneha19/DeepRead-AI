@@ -21,7 +21,7 @@ export default function History() {
         }
 
         const token = await user.getIdToken();
-        const res = await axios.get("/api/messages", {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/messages`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -55,7 +55,7 @@ export default function History() {
 
       const token = await user.getIdToken();
 
-      await axios.delete(`/api/messages/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/messages/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

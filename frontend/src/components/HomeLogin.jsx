@@ -25,9 +25,7 @@ export default function HomeLogin() {
         data.email,
         data.password
       );
-      const token = await auth.currentUser.getIdToken();
-      console.log("DEBUG_TOKEN:", token);
-      window.debugToken = token;
+
       navigate("/user");
     } catch (error) {
       console.error("Login error:", error.message);
