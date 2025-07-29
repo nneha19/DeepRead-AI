@@ -10,8 +10,20 @@ import router from './routes/messageRoutes.js';
 const app=express();
 const PORT=process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://deepreadai.vercel.app'],
+  methods: ['GET', 'POST', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
+
+
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
+});
+
 
 // Health check route (required for Render)
 app.get('/', (req, res) => {
