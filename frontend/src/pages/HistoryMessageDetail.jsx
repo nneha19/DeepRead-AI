@@ -11,6 +11,7 @@ export default function HistoryMessageDetail() {
   const [loading, setLoading] = useState(true);
   const [followupLoading, setFollowupLoading] = useState(false);
   const [username, setUsername] = useState("You");
+  const [copied, setCopied] = useState(false);
 
   const fetchMessage = async () => {
     try {
@@ -125,11 +126,13 @@ export default function HistoryMessageDetail() {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(messageData.followUp);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
               }}
               className="flex items-center gap-2 cursor-pointer bg-green-600 text-white px-4 py-2 rounded-full font-medium hover:bg-green-700 transition"
             >
               <Copy className="w-4 h-4" />
-              Copy Reply
+              {copied ? "Copied!" : "Copy Reply"}
             </button>
 
             <Link

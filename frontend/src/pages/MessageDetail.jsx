@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { Loader2, Sparkles, Copy } from "lucide-react";
+import { Link } from "react-router-dom";
+
 
 export default function MessageDetail() {
   const { id } = useParams();
@@ -10,6 +12,7 @@ export default function MessageDetail() {
   const [loading, setLoading] = useState(true);
   const [followUpLoading, setFollowUpLoading] = useState(false);
   const [username, setUsername] = useState("You");
+  const [copied, setCopied] = useState(false);
 
   const fetchMessage = async () => {
     try {
@@ -109,20 +112,23 @@ export default function MessageDetail() {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(messageData.followUp);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
               }}
-              className="flex items-center gap-2  cursor-pointer bg-green-600 text-white px-4 py-2 rounded-full font-medium hover:bg-green-700 transition"
+              className="flex items-center gap-2 cursor-pointer bg-green-600 text-white px-4 py-2 rounded-full font-medium hover:bg-green-700 transition"
             >
               <Copy className="w-4 h-4" />
-              <span>Copy Reply</span>
+              {copied ? "Copied!" : "Copy Reply"}
             </button>
 
             {/* Analyze New Message Button */}
-            <a
-              href="/user"
-              className="bg-purple-600 cursor-pointer text-white px-4 py-2 rounded-full font-medium hover:bg-purple-700 transition"
+            <Link
+              to="/user"
+              className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-full font-medium hover:bg-purple-700 transition"
             >
+              <Sparkles className="w-4 h-4" />
               Analyze New Message
-            </a>
+            </Link>
           </div>
         </div>
       ) : (
